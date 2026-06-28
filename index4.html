@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Smart Task Manager</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Poppins',sans-serif;
+}
+
+body{
+background:linear-gradient(-45deg,#0f172a,#2563eb,#06b6d4,#4f46e5);
+background-size:400% 400%;
+animation:bg 12s ease infinite;
+min-height:100vh;
+display:flex;
+justify-content:center;
+padding:30px;
+}
+
+@keyframes bg{
+0%{background-position:0% 50%;}
+50%{background-position:100% 50%;}
+100%{background-position:0% 50%;}
+}
+
+.container{
+
+width:100%;
+max-width:1000px;
+
+background:rgba(255,255,255,.12);
+
+backdrop-filter:blur(20px);
+
+border-radius:25px;
+
+padding:30px;
+
+box-shadow:0 20px 45px rgba(0,0,0,.35);
+
+}
+
+header{
+
+display:flex;
+
+justify-content:space-between;
+
+align-items:center;
+
+margin-bottom:30px;
+
+}
+
+header h1{
+
+color:white;
+
+font-size:34px;
+
+}
+
+.theme-btn{
+
+background:white;
+
+border:none;
+
+padding:12px 20px;
+
+border-radius:30px;
+
+cursor:pointer;
+
+font-weight:600;
+
+transition:.3s;
+
+}
+
+.theme-btn:hover{
+
+transform:scale(1.05);
+
+}
+
+.form{
+
+display:grid;
+
+grid-template-columns:2fr 1fr 1fr auto;
+
+gap:15px;
+
+margin-bottom:20px;
+
+}
+
+.form input{
+
+padding:15px;
+
+border:none;
+
+border-radius:12px;
+
+outline:none;
+
+font-size:15px;
+
+}
+
+.addBtn{
+
+background:#10b981;
+
+color:white;
+
+font-size:16px;
+
+border:none;
+
+border-radius:12px;
+
+cursor:pointer;
+
+transition:.3s;
+
+}
+
+.addBtn:hover{
+
+background:#059669;
+
+transform:translateY(-2px);
+
+}
+
+.search{
+
+width:100%;
+
+padding:15px;
+
+margin:15px 0;
+
+border:none;
+
+border-radius:12px;
+
+font-size:16px;
+
+}
+
+.filters{
+
+display:flex;
+
+gap:10px;
+
+margin-bottom:20px;
+
+flex-wrap:wrap;
+
+}
+
+.filters button{
+
+padding:10px 20px;
+
+border:none;
+
+border-radius:30px;
+
+cursor:pointer;
+
+background:white;
+
+font-weight:600;
+
+transition:.3s;
+
+}
+
+.filters button:hover{
+
+background:#2563eb;
+
+color:white;
+
+}
+
+.stats{
+
+display:grid;
+
+grid-template-columns:repeat(3,1fr);
+
+gap:15px;
+
+margin-bottom:25px;
+
+}
+
+.card{
+
+background:rgba(255,255,255,.15);
+
+padding:20px;
+
+border-radius:15px;
+
+text-align:center;
+
+color:white;
+
+}
+
+.card h2{
+
+font-size:32px;
+
+}
+
+.progress{
+
+background:#ddd;
+
+height:12px;
+
+border-radius:30px;
+
+overflow:hidden;
+
+margin-bottom:25px;
+
+}
+
+.progress-bar{
+
+height:100%;
+
+width:0%;
+
+background:linear-gradient(to right,#10b981,#22c55e);
+
+transition:.4s;
+
+}
+
+.task-list{
+
+display:flex;
+
+flex-direction:column;
+
+gap:15px;
+
+}
+
+.task{
+
+background:white;
+
+padding:20px;
+
+border-radius:15px;
+
+display:flex;
+
+justify-content:space-between;
+
+align-items:center;
+
+transition:.3s;
+
+box-shadow:0 10px 20px rgba(0,0,0,.12);
+
+}
+
+.task:hover{
+
+transform:translateY(-4px);
+
+}
+
+.task-info{
+
+flex:1;
+
+}
+
+.task-title{
+
+font-size:19px;
+
+font-weight:600;
+
+}
+
+.task-date{
+
+color:#777;
+
+margin-top:8px;
+
+font-size:14px;
+
+}
+
+.priority{
+
+display:inline-block;
+
+padding:5px 12px;
+
+border-radius:20px;
+
+font-size:12px;
+
+font-weight:bold;
+
+margin-top:10px;
+
+}
+
+.high{
+
+background:#ef4444;
+
+color:white;
+
+}
+
+.medium{
+
+background:#f59e0b;
+
+color:white;
+
+}
+
+.low{
+
+background:#10b981;
+
+color:white;
+
+}
+
+.completed .task-title{
+
+text-decoration:line-through;
+
+color:#16a34a;
+
+}
+
+.actions{
+
+display:flex;
+
+gap:10px;
+
+}
+
+.actions button{
+
+border:none;
+
+padding:10px 15px;
+
+border-radius:10px;
+
+color:white;
+
+cursor:pointer;
+
+font-size:14px;
+
+transition:.3s;
+
+}
+
+.complete{
+
+background:#22c55e;
+
+}
+
+.edit{
+
+background:#f59e0b;
+
+}
+
+.delete{
+
+background:#ef4444;
+
+}
+
+.actions button:hover{
+
+transform:scale(1.05);
+
+}
+
+.dark{
+
+background:#0f172a;
+
+}
+
+.dark .container{
+
+background:#1e293bcc;
+
+}
+
+.dark .task{
+
+background:#1f2937;
+
+color:white;
+
+}
+
+.dark .task-date{
+
+color:#cbd5e1;
+
+}
+
+@media(max-width:800px){
+
+.form{
+
+grid-template-columns:1fr;
+
+}
+
+.stats{
+
+grid-template-columns:1fr;
+
+}
+
+.task{
+
+flex-direction:column;
+
+align-items:flex-start;
+
+gap:15px;
+
+}
+
+.actions{
+
+width:100%;
+
+justify-content:flex-end;
+
+}
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<header>
+
+<h1>📋 Smart Task Manager</h1>
+
+<button class="theme-btn" onclick="toggleTheme()">
+
+🌙 Dark Mode
+
+</button>
+
+</header>
+
+<div class="form">
+
+<input id="taskInput" placeholder="Enter Task">
+
+<input type="date" id="taskDate">
+
+<input type="time" id="taskTime">
+
+<button class="addBtn" onclick="addTask()">
+
++ Add
+
+</button>
+
+</div>
+
+<input class="search" id="searchBox"
+
+placeholder="🔍 Search Tasks..."
+
+onkeyup="searchTask()">
+
+<div class="filters">
+
+<button onclick="showAll()">All</button>
+
+<button onclick="showPending()">Pending</button>
+
+<button onclick="showCompleted()">Completed</button>
+
+<button onclick="clearCompleted()">
+
+Clear Completed
+
+</button>
+
+</div>
+
+<div class="stats">
+
+<div class="card">
+
+<p>Total</p>
+
+<h2 id="total">0</h2>
+
+</div>
+
+<div class="card">
+
+<p>Completed</p>
+
+<h2 id="completed">0</h2>
+
+</div>
+
+<div class="card">
+
+<p>Pending</p>
+
+<h2 id="pending">0</h2>
+
+</div>
+
+</div>
+
+<div class="progress">
+
+<div class="progress-bar"
+
+id="progressBar"></div>
+
+</div>
+
+<div class="task-list"
+
+id="taskList">
+
+</div>
+
+</div>
+
+<!-- JavaScript continues in Part 2 -->
+<script>
+
+let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+
+function saveTasks() {
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+}
+
+function updateStats() {
+    document.getElementById("total").innerHTML = tasks.length;
+
+    let completed = tasks.filter(task => task.completed).length;
+
+    document.getElementById("completed").innerHTML = completed;
+}
+
+function renderTasks() {
+
+    const taskList = document.getElementById("taskList");
+
+    taskList.innerHTML = "";
+
+    tasks.forEach((task, index) => {
+
+        let div = document.createElement("div");
+
+        div.className = "task";
+
+        if(task.completed){
+            div.classList.add("completed");
+        }
+
+        div.innerHTML = `
+
+        <div class="task-info">
+
+            <div class="task-title">
+                ${task.title}
+            </div>
+
+            <div class="task-date">
+                📅 ${task.date || "No Date"}
+                ⏰ ${task.time || ""}
+            </div>
+
+        </div>
+
+        <div class="actions">
+
+        <button class="complete"
+        onclick="completeTask(${index})">
+
+        ${task.completed ? "Undo" : "Done"}
+
+        </button>
+
+        <button class="edit"
+        onclick="editTask(${index})">
+
+        Edit
+
+        </button>
+
+        <button class="delete"
+        onclick="deleteTask(${index})">
+
+        Delete
+
+        </button>
+
+        </div>
+
+        `;
+
+        taskList.appendChild(div);
+
+    });
+
+    updateStats();
+
+    saveTasks();
+
+}
+
+function addTask() {
+
+    let title = document.getElementById("taskInput").value.trim();
+
+    let date = document.getElementById("taskDate").value;
+
+    let time = document.getElementById("taskTime").value;
+
+    if(title==""){
+
+        alert("Please Enter Task");
+
+        return;
+
+    }
+
+    tasks.push({
+
+        title:title,
+
+        date:date,
+
+        time:time,
+
+        completed:false
+
+    });
+
+    document.getElementById("taskInput").value="";
+    document.getElementById("taskDate").value="";
+    document.getElementById("taskTime").value="";
+
+    renderTasks();
+
+}
+
+function completeTask(index){
+
+    tasks[index].completed=!tasks[index].completed;
+
+    renderTasks();
+
+}
+
+function deleteTask(index){
+
+    if(confirm("Delete this task?")){
+
+        tasks.splice(index,1);
+
+        renderTasks();
+
+    }
+
+}
+
+function editTask(index){
+
+    let newTask = prompt("Edit Task", tasks[index].title);
+
+    if(newTask!=null && newTask.trim()!=""){
+
+        tasks[index].title = newTask;
+
+        renderTasks();
+
+    }
+
+}
+
+renderTasks();
+
+</script>
+
+</body>
+
+</html>
